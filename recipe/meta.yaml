@@ -36,6 +36,11 @@ requirements:
 outputs:
   - name: libnghttp2
     script: install.sh  # [unix]
+    build:
+      run_exports:
+        - {{ pin_subpackage('libnghttp2') }}
+      missing_dso_whitelist:
+        - $RPATH/ld64.so.1  # [s390x]
     requirements:
       build:
         - {{ compiler('c') }}
@@ -52,9 +57,6 @@ outputs:
         - libev >=4.11
         - c-ares >=1.7.5
         - libstdcxx-ng  # [linux]
-    build:
-      run_exports:
-        - {{ pin_subpackage('libnghttp2') }}
     files:
       - include/nghttp2/nghttp2*  # [unix]
       - lib/libnghttp2*  # [unix]
