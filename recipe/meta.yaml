@@ -27,7 +27,7 @@ requirements:
     - c-ares >=1.7.5
   run:
     - zlib
-    - openssl  # [unix]
+    - openssl 3.*  # [unix]
     - libev >=4.11
     - c-ares >=1.7.5
     - libstdcxx-ng  # [linux]
@@ -53,7 +53,7 @@ outputs:
         - c-ares >=1.7.5
       run:
         - zlib
-        - openssl  # [unix]
+        - openssl 3.*  # [unix]
         - libev >=4.11
         - c-ares >=1.7.5
         - libstdcxx-ng  # [linux]
