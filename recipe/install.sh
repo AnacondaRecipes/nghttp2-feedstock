@@ -2,8 +2,7 @@ make install
 
 if [[ "$PKG_NAME" == *static ]]
 then
-	# relying on conda to dedup package
-	echo "Keeping all files, conda will dedupe"
+	rm -rfv ${PREFIX}/bin/*
 else
-	rm -rf ${PREFIX}/lib/*.a
+	rm -rfv ${PREFIX}/lib/*.a
 fi
