@@ -10,7 +10,7 @@ source:
   sha256: 9877caa62bd72dde1331da38ce039dadb049817a01c3bdee809da15b754771b8
 
 build:
-  number: 0
+  number: 1
   skip: true  # [not unix]
 
 requirements:
@@ -22,12 +22,13 @@ requirements:
     - pkg-config >=0.20  # [unix]
   host:
     - zlib
-    - openssl 3.0.8  # [unix]
+    - openssl {{ openssl }}  # [unix]
     - libev >=4.11
     - c-ares >=1.7.5
   run:
     - zlib
-    - openssl 3.*  # [unix]
+    # exact pin handled through openssl run_exports
+    - openssl  # [unix]
     - libev >=4.11
     - c-ares >=1.7.5
     - libstdcxx-ng  # [linux]
@@ -48,12 +49,13 @@ outputs:
         - make
       host:
         - zlib
-        - openssl  # [unix]
+        - openssl {{ openssl }}  # [unix]
         - libev >=4.11
         - c-ares >=1.7.5
       run:
         - zlib
-        - openssl 3.*  # [unix]
+        # exact pin handled through openssl run_exports
+        - openssl  # [unix]
         - libev >=4.11
         - c-ares >=1.7.5
         - libstdcxx-ng  # [linux]
