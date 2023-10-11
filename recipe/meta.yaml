@@ -1,16 +1,16 @@
 {% set name = "nghttp2" %}
-{% set version = "1.52.0" %}
+{% set version = "1.57.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://github.com/nghttp2/{{ name }}/releases/download/v{{ version }}/nghttp2-{{ version }}.tar.gz
-  sha256: 9877caa62bd72dde1331da38ce039dadb049817a01c3bdee809da15b754771b8
+  url: https://github.com/{{ name }}/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 1e3258453784d3b7e6cc48d0be087b168f8360b5d588c66bfeda05d07ad39ffd
 
 build:
-  number: 1
+  number: 0
   skip: true  # [not unix]
 
 requirements:
@@ -24,7 +24,7 @@ requirements:
     - zlib
     - openssl {{ openssl }}  # [unix]
     - libev >=4.11
-    - c-ares >=1.7.5
+    - c-ares 1.19.1
   run:
     - zlib
     # exact pin handled through openssl run_exports
@@ -51,7 +51,7 @@ outputs:
         - zlib
         - openssl {{ openssl }}  # [unix]
         - libev >=4.11
-        - c-ares >=1.7.5
+        - c-ares 1.19.1
       run:
         - zlib
         # exact pin handled through openssl run_exports
