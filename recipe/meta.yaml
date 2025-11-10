@@ -43,7 +43,7 @@ outputs:
     script: install.sh  # [unix]
     build:
       run_exports:
-        - {{ pin_subpackage('libnghttp2') }}
+        - {{ pin_subpackage('libnghttp2', max_pin='x.x') }}
     requirements:
       build:
         - {{ stdlib('c') }}
