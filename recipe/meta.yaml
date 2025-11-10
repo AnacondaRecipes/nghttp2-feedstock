@@ -71,6 +71,7 @@ outputs:
       - lib/libnghttp2*  # [unix]
       - lib/nghttp2*  # [unix]
       - lib/pkgconfig/libnghttp2*  # [unix]
+      - bin/nghttp*  # [unix]
     test:
       commands:
         - test -f ${PREFIX}/lib/lib{{ name }}{{ SHLIB_EXT }}  # [unix]
