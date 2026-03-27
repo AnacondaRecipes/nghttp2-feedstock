@@ -1,5 +1,5 @@
 {% set name = "nghttp2" %}
-{% set version = "1.67.1" %}
+{% set version = "1.68.1" %}
 
 package:
   name: {{ name|lower }}-split
@@ -7,75 +7,82 @@ package:
 
 source:
   url: https://github.com/{{ name }}/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.gz
-  sha256: da8d640f55036b1f5c9cd950083248ec956256959dc74584e12c43550d6ec0ef
+  sha256: ceb434c1f9dfe2a9d305b6b797786fb9227484dfa88508d14ca1c50263db55d3
 
 build:
   number: 0
-  skip: true  # [not unix]
-
+  
 requirements:
   build:
     - libtool  # [unix]
     - {{ stdlib('c') }}
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
-    - make
-    - pkg-config >=0.20  # [unix]
+    - cmake       # [win]
+    - ninja-base  # [win]
+    - make        # [unix]
+    - pkg-config  # [unix]
   host:
     - zlib {{ zlib }}
-    - openssl {{ openssl }}  # [unix]
-    - libev {{ libev }}
+    - libev {{ libev }}      # [unix]
     - c-ares {{ c_ares }}
     - libxml2 {{ libxml2 }}
     - jansson {{ jansson }}
+    - openssl {{ openssl }}  # [unix]
   run:
-    - zlib >=1.2.3
-    # exact pin handled through openssl run_exports
-    - openssl >=1.1.1  # [unix]
-    - libev >=4.11
-    - c-ares >=1.7.5
-    - libstdcxx-ng  # [linux]
-    - libxml2 >=2.6.26
-    - jansson >=2.5
+    - zlib
+    - libev    # [unix]
+    - c-ares
+    - libxml2
+    - jansson
+    - openssl  # [unix]
 
 outputs:
   - name: libnghttp2
     script: install.sh  # [unix]
+    script: install.bat  # [win]
     build:
       run_exports:
         - {{ pin_subpackage('libnghttp2', max_pin='x.x') }}
     requirements:
       build:
+        - libtool  # [unix]
         - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - make
+        - cmake       # [win]
+        - ninja-base  # [win]
+        - make        # [unix]
+        - pkg-config  # [unix]
       host:
         - zlib {{ zlib }}
-        - openssl {{ openssl }}  # [unix]
-        - libev {{ libev }}
+        - libev {{ libev }}      # [unix]
         - c-ares {{ c_ares }}
         - libxml2 {{ libxml2 }}
         - jansson {{ jansson }}
+        - openssl {{ openssl }}  # [unix]
       run:
-        - zlib >=1.2.3
-        # exact pin handled through openssl run_exports
-        - openssl >=1.1.1  # [unix]
-        - libev >=4.11
-        - c-ares >=1.7.5
-        - libstdcxx-ng  # [linux]
-        - libxml2 >=2.6.26
-        - jansson >=2.5
-    files:
-      - include/nghttp2/nghttp2*  # [unix]
-      - lib/libnghttp2*  # [unix]
-      - lib/nghttp2*  # [unix]
+        - zlib
+        - libev    # [unix]
+        - c-ares
+        - libxml2
+        - jansson
+        - openssl  # [unix]
+    files:                         # [unix]
+      - include/nghttp2/nghttp2*   # [unix]
+      - lib/libnghttp2*            # [unix]
+      - lib/nghttp2*               # [unix]
       - lib/pkgconfig/libnghttp2*  # [unix]
-      - bin/nghttp*  # [unix]
+      - bin/nghttp*                # [unix]
     test:
       commands:
-        - test -f ${PREFIX}/lib/lib{{ name }}{{ SHLIB_EXT }}  # [unix]
-
+        # The binary command requires libev which we don't have on the main channel
+        # on windows
+        - nghttp -nv https://nghttp2.org                           # [unix]
+        - test ! -f ${PREFIX}/lib/lib{{ name }}.a                  # [unix]
+        - test -f ${PREFIX}/lib/lib{{ name }}${SHLIB_EXT}          # [unix]
+        - if not exist %PREFIX%\\Library\\bin\\nghttp2.dll exit 1  # [win]
+        - if not exist %PREFIX%\\Library\\lib\\nghttp2.lib exit 1  # [win]
   - name: libnghttp2-static
     script: install.sh  # [unix]
     build:
@@ -85,7 +92,8 @@ outputs:
         - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - make
+        - make        # [unix]
+        - pkg-config  # [unix]
       host:
         - {{ pin_subpackage('libnghttp2', exact=True) }}
       run:
