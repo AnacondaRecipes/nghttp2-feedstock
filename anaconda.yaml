@@ -6,3 +6,6 @@ upstream_sources:
       include_regex: ^v\d+\.\d+\.\d+$
       from_pattern: ^v(.+)$
       to_pattern: \1
+    packages:
+      - libnghttp2
+      - libnghttp2-static
